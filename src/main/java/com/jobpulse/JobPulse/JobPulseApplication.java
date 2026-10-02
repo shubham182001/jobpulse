@@ -8,7 +8,7 @@ public class JobPulseApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(JobPulseApplication.class, args);
-		System.out.println("jobPulse is running");
+		System.out.println("jobPulse server is running");
 	}
 
 }
