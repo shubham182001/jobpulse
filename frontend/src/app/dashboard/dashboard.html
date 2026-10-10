@@ -1,0 +1,135 @@
+<div class="dashboard">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-section">
+      <div class="logo">🤖</div>
+      <h1>JobPulse</h1>
+    </div>
+    <div class="user-section">
+      <span class="user-name">{{ user?.user?.firstName }} {{ user?.user?.lastName }}</span>
+      <button (click)="logout()" class="logout-btn">Logout</button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- TAB 1: DASHBOARD (all jobs) -->
+    <div *ngIf="activeTab === 'dashboard'" class="tab-content">
+      <div class="tab-header">
+        <h2>📋 All Jobs</h2>
+        <button (click)="loadAllJobs()" class="refresh-btn">↻ Refresh</button>
+      </div>
+
+      <div *ngIf="loadingJobs" class="loading">Loading jobs...</div>
+      <div *ngIf="!loadingJobs && allJobs.length === 0" class="empty">
+        No jobs yet. Trigger the agent to discover jobs.
+      </div>
+
+      <div class="jobs-grid">
+        <div *ngFor="let job of allJobs" class="job-card">
+          <h3>{{ job.title }}</h3>
+          <p class="company">🏢 {{ job.company?.name }}</p>
+          <p class="location">📍 {{ job.location }}</p>
+          <p class="desc">{{ job.description }}</p>
+          <a [href]="job.url" target="_blank" class="job-link">View Job →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: MY JOBS (matched) -->
+    <div *ngIf="activeTab === 'myjobs'" class="tab-content">
+      <div class="tab-header">
+        <h2>⭐ My Matched Jobs</h2>
+        <button (click)="loadMyJobs()" class="refresh-btn">↻ Refresh</button>
+      </div>
+
+      <div *ngIf="loadingMyJobs" class="loading">Loading your matches...</div>
+      <div *ngIf="!loadingMyJobs && myJobs.length === 0" class="empty">
+        No matched jobs yet. The agent will match jobs based on your preferences.
+      </div>
+
+      <div class="jobs-grid">
+        <div *ngFor="let match of myJobs" class="job-card matched">
+          <div class="match-score">Score: {{ match.relevanceScore || 'N/A' }}</div>
+          <h3>{{ match.job?.title }}</h3>
+          <p class="company">🏢 {{ match.job?.company?.name }}</p>
+          <p class="location">📍 {{ match.job?.location }}</p>
+          <p class="reasoning">💡 {{ match.reasoning }}</p>
+          <a [href]="match.job?.url" target="_blank" class="job-link">View Job →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: TRIGGER (center) -->
+    <div *ngIf="activeTab === 'trigger'" class="tab-content trigger-tab">
+      <div class="trigger-hero">
+        <div class="hero-icon">⚡</div>
+        <h2>Trigger Agent</h2>
+        <p>Ask the agent to find jobs from companies</p>
+      </div>
+
+      <div class="agent-input">
+        <input
+          [(ngModel)]="agentQuery"
+          placeholder="e.g. find jobs for zoho"
+          [disabled]="agentRunning" />
+        <button (click)="triggerAgent()" [disabled]="agentRunning" class="btn-trigger">
+          <span *ngIf="!agentRunning">🚀 Run Agent</span>
+          <span *ngIf="agentRunning" class="loader"></span>
+        </button>
+      </div>
+
+      <div *ngIf="agentRunning" class="agent-status">
+        <div class="pulse"></div>
+        <p>Agent is thinking...</p>
+      </div>
+
+      <div *ngIf="agentResult" class="agent-result">
+        <h3>Agent Response</h3>
+        <pre>{{ agentResult }}</pre>
+      </div>
+    </div>
+
+    <!-- TAB 4: RESET -->
+    <div *ngIf="activeTab === 'reset'" class="tab-content reset-tab">
+      <div class="reset-card">
+        <div class="reset-icon">⚠️</div>
+        <h2>Reset Preferences</h2>
+        <p>This will clear all your AI agent preferences (skills, roles, locations).</p>
+        <p class="warning">This action cannot be undone.</p>
+        <button (click)="resetPreferences()" class="btn-danger">
+          Reset My Preferences
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM TABS -->
+  <div class="bottom-tabs">
+
+    <button [class.active]="activeTab === 'dashboard'" (click)="setTab('dashboard')" class="tab-btn">
+      <span class="tab-icon">📋</span>
+      <span class="tab-label">Dashboard</span>
+    </button>
+
+    <button [class.active]="activeTab === 'myjobs'" (click)="setTab('myjobs')" class="tab-btn">
+      <span class="tab-icon">⭐</span>
+      <span class="tab-label">My Jobs</span>
+    </button>
+
+    <button [class.active]="activeTab === 'trigger'" (click)="setTab('trigger')" class="tab-btn center-tab">
+      <span class="tab-icon">⚡</span>
+      <span class="tab-label">Trigger</span>
+    </button>
+
+    <button [class.active]="activeTab === 'reset'" (click)="setTab('reset')" class="tab-btn">
+      <span class="tab-icon">🔄</span>
+      <span class="tab-label">Reset</span>
+    </button>
+
+  </div>
+
+</div>

@@ -1,0 +1,117 @@
+<div class="auth-wrapper">
+  <div class="glow-bg"></div>
+
+  <div class="auth-card">
+
+    <div class="brand">
+      <div class="logo">🤖</div>
+      <h1>JobPulse</h1>
+      <p class="tagline">Autonomous Job Discovery Agent</p>
+    </div>
+
+    <div class="tabs">
+      <button type="button" [class.active]="isLoginMode" (click)="isLoginMode = true">Login</button>
+      <button type="button" [class.active]="!isLoginMode" (click)="isLoginMode = false">Register</button>
+      <div class="tab-indicator" [class.right]="!isLoginMode"></div>
+    </div>
+    
+
+    <!-- LOGIN -->
+    <form *ngIf="isLoginMode" (ngSubmit)="login()" class="auth-form">
+      <div class="field">
+        <label>Email</label>
+        <input type="email" [(ngModel)]="loginEmail" name="loginEmail" placeholder="you@example.com" required />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" [(ngModel)]="loginPassword" name="loginPassword" placeholder="••••••••" required />
+      </div>
+      <button [disabled]="loading$ | async" type="submit" class="btn-primary">
+        <span *ngIf="loading$ | async" class="loader"></span>
+        <span *ngIf="!(loading$ | async)">Access Agent</span>
+      </button>
+    </form>
+
+    <!-- REGISTER -->
+    <form *ngIf="!isLoginMode" (ngSubmit)="register()" class="auth-form">
+
+      <div class="section-label">Account Info</div>
+
+      <div class="row">
+        <div class="field">
+          <label>First Name</label>
+          <input type="text" [(ngModel)]="firstName" name="firstName" placeholder="Shubham" required />
+        </div>
+        <div class="field">
+          <label>Last Name</label>
+          <input type="text" [(ngModel)]="lastName" name="lastName" placeholder="Nazare" required />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Email</label>
+        <input type="email" [(ngModel)]="email" name="email" placeholder="you@example.com" required />
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>Password</label>
+          <input type="password" [(ngModel)]="password" name="password" placeholder="••••••••" required />
+        </div>
+        <div class="field">
+          <label>Phone</label>
+          <input type="text" [(ngModel)]="phoneNumber" name="phoneNumber" placeholder="+91 90000 00000" />
+        </div>
+      </div>
+
+      <div class="section-label">AI Agent Preferences</div>
+
+      <div class="field">
+        <label>Skills <small>(comma separated)</small></label>
+        <input type="text" [(ngModel)]="skills" name="skills" placeholder="Java, Spring Boot, PostgreSQL" />
+      </div>
+
+      <div class="field">
+        <label>Preferred Roles</label>
+        <input type="text" [(ngModel)]="preferredRoles" name="preferredRoles" placeholder="Backend Developer, Software Engineer" />
+      </div>
+
+      <div class="field">
+        <label>Preferred Locations</label>
+        <input type="text" [(ngModel)]="preferredLocations" name="preferredLocations" placeholder="Bangalore, Remote" />
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>Min Salary (₹)</label>
+          <input type="number" [(ngModel)]="minSalary" name="minSalary" placeholder="1500000" />
+        </div>
+        <div class="field">
+          <label>Experience (Years)</label>
+          <input type="number" [(ngModel)]="experienceYears" name="experienceYears" placeholder="3" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Education</label>
+        <input type="text" [(ngModel)]="education" name="education" placeholder="B.Tech Computer Science" />
+      </div>
+
+      <label class="checkbox">
+        <input type="checkbox" [(ngModel)]="remoteOk" name="remoteOk" />
+        <span>Open to remote roles</span>
+      </label>
+
+      <button [disabled]="loading$ | async" type="submit" class="btn-primary">
+        <span *ngIf="loading$ | async" class="loader"></span>
+        <span *ngIf="!(loading$ | async)">Initialize Agent</span>
+      </button>
+    </form>
+
+    <p class="footer">
+      <span *ngIf="isLoginMode">New here? <a (click)="toggleMode()">Create account</a></span>
+      <span *ngIf="!isLoginMode">Already registered? <a (click)="toggleMode()">Login</a></span>
+    </p>
+
+  </div>
+</div>
